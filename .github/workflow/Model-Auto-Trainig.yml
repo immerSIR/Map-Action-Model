@@ -2,9 +2,10 @@ name: Model-Auto-Trainig
 
 on:
   push:
-    branches: [ main ]
+    branches:
+    - main
   pull_request:
-    branches: [ yugo-b ] 
+    - yugo-b
 
 jobs:
   Build-and-run:
