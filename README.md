@@ -1,1 +1,1 @@
-## Updates are comming soon
+## Updates are coming soon
