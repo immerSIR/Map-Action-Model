@@ -1,5 +1,6 @@
 import os
 import torch
+from tqdm.notebook import tqdm
 
 
 def train_step(model: torch.nn.Module,
@@ -57,7 +58,7 @@ def train(model: torch.nn.Module,
           epochs: int,
           device: torch.device):
     results = {"train_loss": [],
-               "train_acc" [],
+               "train_acc": [],
                "test_loss": [],
                "test_acc": []}
     

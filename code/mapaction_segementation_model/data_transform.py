@@ -1,4 +1,5 @@
-import torchvision.transforms import v2 as T
+import torch
+from torchvision.transforms import v2 as T
 
 def get_transform(train):
     transforms = []
@@ -6,6 +7,6 @@ def get_transform(train):
         transforms.append(T.RandomHorizontalFlip(0.5))
     transforms.append(T.ToDtype(torch.float, scale=True))
     transforms.append(T.ToPureTensor())
-    retrun T.compose(transforms)
+    return T.compose(transforms)
     
     

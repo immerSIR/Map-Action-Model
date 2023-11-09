@@ -1,23 +1,21 @@
 import torch
 import os
+import utils
 from utils import MapActionDataset
 from data_transform import get_transform
-from torch.uitls.data import DataLoader, Subset
+from torch.utils.data import DataLoader, Subset
 
-device = torch.device('cuda') if torch.cuda.is_available() else
-torch.device('cpu')
 
-num_classes = 
 NUM_WORKERS = os.cpu_count()
 
 
-mapaction_train_dataset = MapActionDataset('', get_transform(train=True))
-mapaction_test_dataset = MapActionDataset('', get_transform(train=false))
+mapaction_dataset = MapActionDataset('', get_transform(train=True))
+mapaction_test_dataset = MapActionDataset('', get_transform(train=False))
 
 
-indices = torch.randperm(len(dataset)).tolist()
-dataset = Subset(mapaction_train_dataset, indices[:])
-test_dataset = Subset(mapaction_test_dataset, indices[:])
+indices = torch.randperm(len(mapaction_dataset)).tolist()
+dataset = Subset(mapaction_dataset, indices[:70])
+test_dataset = Subset(mapaction_test_dataset, indices[70:])
 
 
 
