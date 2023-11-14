@@ -7,6 +7,6 @@ def get_transform(train):
         transforms.append(T.RandomHorizontalFlip(0.5))
     transforms.append(T.ToDtype(torch.float, scale=True))
     transforms.append(T.ToPureTensor())
-    return T.compose(transforms)
+    return T.Compose(transforms)
     
     
