@@ -1,6 +1,6 @@
 import torch
 import os
-from utils import MapActionDataset
+from utility import MapActionDataset
 from data_transform import get_transform
 from torch.utils.data import DataLoader, Subset
 

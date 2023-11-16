@@ -1,118 +1,72 @@
 import os
+import time
 import torch
 from tqdm import tqdm
-from data_loader import mapaction_test_data_loader, mapction_data_loader
-import model
 from typing import Tuple, List, Dict
+from torch import nn, optim
+from torch.utils.data import DataLoader
 
-num_classes = 2
-Model =model.mapaction_instance_segmentation_model(num_classes)
-Device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-Loss_fn = torch.nn.CrossEntropyLoss()
-
-params = [p for p in Model.parameters() if p.requires_grad]
+import sys
+sys.path.append('/home/mapaction/mapaction_env/Map-Action-Model/code/vision_dir/')
+from engine import evaluate, _get_iou_types
 
 
-Optimizer = torch.optim.SGD(
-    params,
-    lr=0.005,
-    momentum=0.9,
-    weight_decay=0.0005
-)
 
-def train_step(model: torch.nn.Module,
-               dataloader: torch.utils.data.DataLoader,
-               loss_fn: torch.nn.Module,
-               optimizer: torch.optim.Optimizer,
-               device: torch.device) -> Tuple[float, float]:
-    model.train()
-    train_loss, train_acc = 0.0, 0.0
-    
-    for X, y in tqdm(dataloader):
-        X = list(image.to(device) for image in X)
-        y = [{k: v.to(device) if isinstance(v, torch.Tensor) else v for k, v in t.items()} for t in y]
-        
-        optimizer.zero_grad()
-        #print("Targets:", y)
-        loss_dict = model(X, y)
-        loss = sum(loss for loss in loss_dict.values())
-        loss.backward()
-        optimizer.step()
-        
-        # Calculate accuracy
-        #y_pred_class = torch.argmax(torch.softmax(y_pred, dim=1), dim=1)
-        #train_acc += (y_pred_class == y).sum().item() / len(y_pred)
-        
-        # Accumulate loss
-        train_loss  = loss
-    
-    # Average loss and accuracy over the entire training set
-    #train_loss /= len(dataloader)
-    #train_acc /= len(dataloader)
-    
-    return train_loss
-def test_step(model: torch.nn.Module,
-              dataloader: torch.utils.data.DataLoader,
-              loss_fn: torch.nn.Module,
-              device: torch.device) -> Tuple[float, float]:
-    model.eval()
-    test_loss, test_acc = 0.0, 0.0
-    
-    with torch.no_grad():
+
+
+class ModelTrainer:
+    def __init__(self, model: nn.Module, train_loader: DataLoader, test_loader: DataLoader,
+                 optimizer: optim.Optimizer, loss_fn: nn.Module, device: torch.device):
+        self.model = model
+        self.train_loader = train_loader
+        self.test_loader = test_loader
+        self.optimizer = optimizer
+        self.loss_fn = loss_fn
+        self.device = device
+
+    def train_step(self, dataloader: DataLoader) -> torch.Tensor:
+        self.model.train()
+        train_loss = 0.0
+
         for X, y in tqdm(dataloader):
-            X = X.to(torch.uint8)
-            y = [{k: v.to(device) if isinstance(v, torch.Tensor) else v for k, v in t.items()} for t in y]
-            test_pred_logits = model(X)
-            loss = loss_fn(test_pred_logits, y)
-            test_loss +=loss.cpu().item()
-            
-            # Calculate accuracy
-            test_pred_labels = test_pred_logits.argmax(dim=1)
-            test_acc += (test_pred_labels == y).sum().item() / len(test_pred_labels)
-            
-            # Accumulate loss
+            X = list(image.to(self.device) for image in X)
+            y = [{k: v.to(self.device) if isinstance(v, torch.Tensor) else v for k, v in t.items()} for t in y]
 
-    
-    # Average loss and accuracy over the entire test set
-    test_loss /= len(dataloader)
-    test_acc /= len(dataloader)
-    
-    return test_loss, test_acc
+            self.optimizer.zero_grad()
+            loss_dict = self.model(X, y)
+            loss = sum(loss for loss in loss_dict.values())
+            loss.backward()
+            self.optimizer.step()
 
-def train(model: torch.nn.Module,
-          train_dataloader: torch.utils.data.DataLoader,
-          test_dataloader: torch.utils.data.DataLoader,
-          optimizer: torch.optim.Optimizer,
-          loss_fn: torch.nn.Module,
-          epochs: int,
-          device: torch.device) -> Dict[str, List[float]]:
-    results = {"train_loss": [],
-               "train_acc": [],
-               "test_loss": [],
-               "test_acc": []}
-    
-    model.to(device)
-    
-    for epoch in tqdm(range(epochs)):
-        train_loss = train_step(Model,
-                                           mapction_data_loader,
-                                           Loss_fn,
-                                           Optimizer,
-                                           Device)
-        test_loss , test_acc = test_step(Model,
-                                        mapaction_test_data_loader,
-                                        Loss_fn,
-                                        Device)
+            train_loss = loss
+
+        return train_loss
+
+    def test_step(self, dataloader: DataLoader) -> torch.Tensor:
+        evaluate(self.model, dataloader, device=self.device)
         
-        print(f"Epoch: {epoch + 1} | "
-              f"train_loss: {train_loss:.4f} | "
-              f"test_loss: {test_loss:.4f} | "
-              f"test_acc: {test_acc:.4f}"
-              )
-        
-        results["train_loss"].append(train_loss)
-        #results["train_acc"].append(train_acc)
-        results["test_loss"].append(test_loss)
-        results["test_acc"].append(test_acc)
-        
-    return results
+        return evaluate
+
+    def train(self, epochs: int) -> Dict[str, List[float]]:
+        results = {"train_loss": [],
+                   "train_acc": [],
+                   "test_loss": [],
+                   "test_acc": []}
+
+        self.model.to(self.device)
+
+        for epoch in tqdm(range(epochs)):
+            train_loss = self.train_step(self.train_loader)
+            test_loss = self.test_step(self.test_loader)
+
+            print(f"Epoch: {epoch + 1} | "
+                  f"train_loss: {train_loss:.4f} | "
+                   #f"test_loss: {test_loss} | "
+                  )
+
+            results["train_loss"].append(train_loss)
+            # results["train_acc"].append(train_acc)
+            results["test_loss"].append(test_loss)
+            # results["test_acc"].append(test_acc)
+
+        return results
