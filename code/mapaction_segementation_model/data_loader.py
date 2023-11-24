@@ -15,8 +15,8 @@ mapaction_test_dataset = MapActionDataset(root, get_transform(train=False))
 
 indices = torch.randperm(len(mapaction_dataset)).tolist()
 dataset = Subset(mapaction_dataset, indices[:7])
-test_dataset = Subset(mapaction_dataset, indices[7:])
-
+test_dataset = Subset(mapaction_dataset, indices[5:])
+#print(len(test_dataset))
 
 def collate_fn(batch):
     return tuple(zip(*batch))

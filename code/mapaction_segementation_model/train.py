@@ -3,7 +3,7 @@ from data_loader import mapaction_test_data_loader, mapction_data_loader
 import model
 from training_pipeline import ModelTrainer
 
-save_path = "/home/mapaction/mapaction_env/Map-Action-Model/model/test4.pth"
+save_path = "/home/mapaction/mapaction_env/Map-Action-Model/model/test11.pth"
 num_classes = 2
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 

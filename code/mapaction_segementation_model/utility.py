@@ -8,32 +8,42 @@ from torchvision.transforms.v2 import functional as F
 
 
 class MapActionDataset(torch.utils.data.Dataset):
-    def __init__(self, root, transforms):
+    def __init__(self, root, transforms, classes={1: "D-Solide"}):
         self.root = root
         self.transforms = transforms
+        self.classes = classes  # Dictionary mapping class names to integer labels
 
-        self.imgs = list(sorted(os.listdir(os.path.join(root, "images2"))))
-        self.masks = list(sorted(os.listdir(os.path.join(root, "Mask"))))
+        self.imgs = []
+        self.masks = []
+
+        for class_label, class_name in self.classes.items():
+            images_path = os.path.join(root, "images2", class_name)
+            masks_path = os.path.join(root, "Mask", class_name)
+
+            class_imgs = list(sorted(os.listdir(images_path)))
+            class_masks = list(sorted(os.listdir(masks_path)))
+
+            self.imgs.extend([(class_label, img) for img in class_imgs])
+            self.masks.extend([(class_label, mask) for mask in class_masks])
 
     def __getitem__(self, idx):
-        # load images and masks
-        img_path = os.path.join(self.root, "images2", self.imgs[idx])
-        mask_path = os.path.join(self.root, "Mask", self.masks[idx])
-        img = read_image(img_path,  mode=ImageReadMode.RGB)
+        class_label, img_name = self.imgs[idx]
+        mask_name = self.masks[idx][1]
+
+        img_path = os.path.join(self.root, "images2", self.classes[class_label], img_name)
+        mask_path = os.path.join(self.root, "Mask", self.classes[class_label], mask_name)
+
+        img = read_image(img_path, mode=ImageReadMode.RGB)
         mask = read_image(mask_path)
-        # instances are encoded as different colors
+
         obj_ids = torch.unique(mask)
-        # first id is the background, so remove it
         obj_ids = obj_ids[1:]
         num_objs = len(obj_ids)
 
-        # split the color-encoded mask into a set
-        # of binary masks
         masks = (mask == obj_ids[:, None, None]).to(dtype=torch.uint8)
 
-        # get bounding box coordinates for each mask
         boxes = masks_to_boxes(masks)
-        
+
         boxes = []
         for mask in masks:
             pos = torch.where(mask)
@@ -50,27 +60,21 @@ class MapActionDataset(torch.utils.data.Dataset):
             boxes.append([xmin, ymin, xmax, ymax])
 
         boxes = torch.tensor(boxes)
-
-        assert len(boxes) > 0, "No valid bounding boxes found."
-
-        # there is only one class
-        labels = torch.ones((num_objs,), dtype=torch.int64)
-
         image_id = idx
+        img = tv_tensors.Image(img)
+        labels = (torch.ones((num_objs,), dtype=torch.int64) * class_label)
+        #print(labels)
         area = (boxes[:, 3] - boxes[:, 1]) * (boxes[:, 2] - boxes[:, 0])
-        # suppose all instances are not crowd
         iscrowd = torch.zeros((num_objs,), dtype=torch.int64)
 
-        # Wrap sample and targets into torchvision tv_tensors:
-        img = tv_tensors.Image(img)
-
-        target = {}
-        target["boxes"] = tv_tensors.BoundingBoxes(boxes, format="xyxy", canvas_size=F.get_size(img))
-        target["masks"] = tv_tensors.Mask(masks)
-        target["labels"] = labels
-        target["image_id"] = image_id
-        target["area"] = area
-        target["iscrowd"] = iscrowd
+        target = {
+            "boxes": tv_tensors.BoundingBoxes(boxes, format="xyxy", canvas_size=F.get_size(img)),
+            "masks": tv_tensors.Mask(masks),
+            "labels": labels,
+            "image_id": image_id,
+            "area": area,
+            "iscrowd": iscrowd,
+        }
 
         if self.transforms is not None:
             img, target = self.transforms(img, target)
