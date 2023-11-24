@@ -33,8 +33,8 @@ class ModelTrainer:
             y = [{k: v.to(self.device) if isinstance(v, torch.Tensor) else v for k, v in t.items()} for t in y]
             loss_dict = self.model(X, y)
             losses = sum(loss for loss in loss_dict.values())
+
             self.optimizer.zero_grad()
-            
             losses.backward()
             self.optimizer.step()
 
@@ -43,7 +43,6 @@ class ModelTrainer:
         return train_loss
 
     def test_step(self, dataloader: DataLoader) -> torch.Tensor:
-        
         return evaluate(self.model, dataloader, device=self.device)
 
     def train(self, epochs: int) -> Dict[str, List[float]]:
