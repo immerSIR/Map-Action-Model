@@ -12,6 +12,8 @@ from engine import evaluate, _get_iou_types
 
 
 
+
+
 class ModelTrainer:
     def __init__(self, model: nn.Module, train_loader: DataLoader, test_loader: DataLoader,
                  optimizer: optim.Optimizer, loss_fn: nn.Module, device: torch.device):
@@ -41,8 +43,9 @@ class ModelTrainer:
         return train_loss
 
     def test_step(self, dataloader: DataLoader) -> torch.Tensor:
+        evaluate(self.model, dataloader, device=self.device)
         
-        return evaluate(self.model, dataloader, device=self.device)
+        return evaluate
 
     def train(self, epochs: int) -> Dict[str, List[float]]:
         results = {"train_loss": [],
