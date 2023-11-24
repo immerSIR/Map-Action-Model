@@ -28,9 +28,9 @@ class ModelTrainer:
         self.model.train()
         train_loss = 0.0
 
-        for X, y in tqdm(dataloader):
+        for X, y in tqdm(self.train_loader):
             X = list(image.to(self.device) for image in X)
-            y = [{k: v.to(self.device) if isinstance(v, torch.Tensor) else v for k, v in t.items()} for t in y]
+            y = [{k: v.to(self.device) for k, v in t.items()} for t in y]
             loss_dict = self.model(X, y)
             losses = sum(loss for loss in loss_dict.values())
 
@@ -43,7 +43,8 @@ class ModelTrainer:
         return train_loss
 
     def test_step(self, dataloader: DataLoader) -> torch.Tensor:
-        return evaluate(self.model, dataloader, device=self.device)
+        
+        return evaluate(self.model, self.test_loader, device=self.device)
 
     def train(self, epochs: int) -> Dict[str, List[float]]:
         results = {"train_loss": [],

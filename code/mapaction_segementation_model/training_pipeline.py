@@ -37,7 +37,6 @@ class ModelTrainer:
             
             losses.backward()
             self.optimizer.step()
-
             train_loss = losses
 
         return train_loss
