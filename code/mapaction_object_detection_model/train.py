@@ -4,7 +4,7 @@ import m_a_detection_model as model
 from training_utils import ModelTrainer
 
 save_path = "/home/mapaction/mapaction_env/Map-Action-Model/model/MAISM1.pth"
-num_classes = 2
+num_classes = 3
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
 Model =model.map_action_instance_segmentation_model(num_classes)
