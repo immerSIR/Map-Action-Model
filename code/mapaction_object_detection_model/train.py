@@ -26,7 +26,7 @@ trainer = ModelTrainer(Model,
                     optimizer=optimizer,
                     device=device)
 
-num_epochs = 5
+num_epochs = 20
 
 training_result = trainer.train(epochs=num_epochs)
 torch.save(Model.state_dict(), save_path)
