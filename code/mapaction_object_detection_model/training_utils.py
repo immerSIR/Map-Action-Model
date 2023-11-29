@@ -7,7 +7,7 @@ from torch import nn, optim
 from torch.utils.data import DataLoader
 
 import sys
-sys.path.append('/home/mapaction/mapaction_env/Map-Action-Model/code/vision_dir/')
+sys.path.append('C:\\Users\\Wakfu\\OneDrive\\Documents\\map-action\\Map-Action-Model\\code\\vision_dir')
 from engine import evaluate, _get_iou_types
 
 
