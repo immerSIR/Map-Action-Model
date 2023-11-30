@@ -1,0 +1,8 @@
+
+
+
+train: /home/yugo19/Documents/Exp-data/yolo-data/images/
+val: /home/yugo19/Documents/Exp-data/yolo-data/images/
+
+nc: 2
+names : ['D-Liquide', 'D-Solide']
