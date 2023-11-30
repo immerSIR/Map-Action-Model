@@ -3,7 +3,7 @@ from map_action_data_loader import map_action_test_data_loader, map_action_data_
 import m_a_detection_model as model
 from training_utils import ModelTrainer
 
-save_path = "/home/mapaction/mapaction_env/Map-Action-Model/model/MAISM1.pth"
+save_path = "C:\\Users\\Wakfu\\OneDrive\\Documents\\map-action\\Map-Action-Model\\model\\MAISM1.pth"
 num_classes = 3
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
@@ -26,7 +26,7 @@ trainer = ModelTrainer(Model,
                     optimizer=optimizer,
                     device=device)
 
-num_epochs = 20
+num_epochs = 5
 
 training_result = trainer.train(epochs=num_epochs)
 torch.save(Model.state_dict(), save_path)
