@@ -3,7 +3,7 @@ from torchvision.models import vgg16_bn, VGG16_BN_Weights
 from zenml.steps import step, Output, BaseStepConfig
 
 @step
-def m_a_model(num_classes) -> Output(
+def m_a_model(num_classes: int) -> Output(
     model = torch.nn.Module
 ):
     # Load VGG16 model with batch normalization weights
