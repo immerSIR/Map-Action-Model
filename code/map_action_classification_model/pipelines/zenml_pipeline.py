@@ -1,15 +1,16 @@
 import os
+import torch
 from zenml.steps import step, Output, BaseStepConfig
 from zenml.pipelines import pipeline
 from zenml.integrations.mlflow.mlflow_step_decorator import enable_mlflow
 
 
-def zenml_training_pipeline(get_data, data_preparation ,model,
-                      train_model ,batch_size ,num_workers ,evaluate_model,optimizer ,loss_fn, epochs):
+def zenml_training_pipeline(get_data, data_preparation ,model: nn.Module,
+                      train_model ,batch_size ,num_workers:int ,evaluate_model,optimizer:torch.optim.Optimizer ,loss_fn:nn.Module, epochs: int):
     
     
-    get_data = download_and_organize_data()
-    training_dataloader, testing_dataloader, class_names = create_dataloaders(get_data['train_dir'],
+    get_data = get_data()
+    training_dataloader, testing_dataloader, class_names = data_preparation(get_data['train_dir'],
                                                                               get_data['valid_dir'], 
                                                                               get_data['test_dir'], 
                                                                               transform = get_transform(train=True), 

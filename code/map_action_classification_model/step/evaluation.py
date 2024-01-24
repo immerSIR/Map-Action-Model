@@ -11,7 +11,7 @@ from zenml.integrations.mlflow.mlflow_step_decorator import enable_mlflow
 
 @enable_mlflow 
 @step(enable_cache=False)
-def test_step(model, test_dataloader, loss_fn) -> Output(
+def test_step(model: nn.Module, test_dataloader: DataLoader, loss_fn: nn.Module) -> Output(
     test_loss = float,
     test_acc = float
 ):
