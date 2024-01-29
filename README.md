@@ -5,7 +5,7 @@
     <h1 align="center">MAP-ACTION-MODEL</h1>
 </p>
 <p align="center">
-    <em>Mapping the future with precision and action.</em>
+    <em></em>
 </p>
 <p align="center">
 	<img src="https://img.shields.io/github/license/223MapAction/Map-Action-Model?style=flat&color=0080ff" alt="license">
@@ -46,7 +46,7 @@
 
 ## 📍 Overview
 
-The Map-Action-Model project is a software solution that aims to provide a reliable and efficient mapping and data collection platform. By leveraging the power of technology, it enables users to create, store, and analyze geographic data for humanitarian and disaster response efforts. With its user-friendly interface, the project allows organizations and individuals to easily collaborate and contribute to mapping projects, facilitating efficient decision-making and resource allocation in the face of emergencies. With its robust functionality and adherence to open-source principles, Map-Action-Model empowers communities to create and share accurate maps that aid in the delivery of critical services and support disaster relief operations.
+
 
 ---
 
