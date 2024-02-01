@@ -4,17 +4,19 @@ import torch.nn as nn
 from tqdm import tqdm
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
-from typing import Tuple, List, Dict
-from zenml.steps import step, Output, BaseStepConfig
+from typing import Annotated, Optional, Tuple, List, Dict
+from zenml import step
 from zenml.pipelines import pipeline
-from zenml.integrations.mlflow.mlflow_step_decorator import enable_mlflow
+from zenml.integrations.mlflow.experiment_trackers import (
+    MLFlowExperimentTracker,
+)
 
-@enable_mlflow 
-@step(enable_cache=False)
-def test_step(model: nn.Module, test_dataloader: DataLoader, loss_fn: nn.Module) -> Output(
-    test_loss = float,
-    test_acc = float
-):
+
+@step(enable_cache=False, experiment_tracker="mlflow_tracker")
+def test_step(model: nn.Module, test_dataloader: DataLoader, loss_fn: nn.Module) -> Tuple[
+    Annotated[float, "test_loss"],
+    Annotated[float, "test_acc"]
+]:
     model.eval()
     test_loss, test_acc = 0, 0
 

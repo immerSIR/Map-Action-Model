@@ -1,11 +1,9 @@
 import torch
 from torchvision.transforms import v2 as T
-from zenml.steps import step, Output, BaseStepConfig
+from typing import Annotated, Optional, Tuple
 
 
-def get_transform(train) -> Output(
-    
-):
+def get_transform(train):
     # Initialize an empty list to store transformations
     transforms = []
 
