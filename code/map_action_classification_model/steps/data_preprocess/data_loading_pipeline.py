@@ -1,18 +1,17 @@
 import torch
 from torchvision import datasets
 from torch.utils.data import DataLoader
-from typing import Tuple, List, Dict
-from zenml.steps import step, Output, BaseStepConfig
+from typing import Annotated, Optional, Tuple, List, Dict
+from zenml import step
 from zenml.pipelines import pipeline
-from zenml.integrations.mlflow.mlflow_step_decorator import enable_mlflow
+
 
 @step
-def create_dataloaders(train_dir, valid_dir, test_dir, transform, batch_size, num_workers) -> Output(
-    training_dataloader = DataLoader,
-    testing_dataloader = DataLoader,
-    class_names = List
-
-):
+def create_dataloaders(train_dir, valid_dir, test_dir, transform, batch_size, num_workers) -> Tuple[
+    Annotated[DataLoader, "trainin_dataloader"],
+    Annotated[DataLoader, "testting_dataloader"],
+    Annotated[List, "class_names"]
+]:
     
     # Use ImageFolder to create dataset(s)
     train_data = datasets.ImageFolder(train_dir, transform=transform)
@@ -21,6 +20,7 @@ def create_dataloaders(train_dir, valid_dir, test_dir, transform, batch_size, nu
     
     # Get class names
     class_names = train_data.classes
+    num_classes = len(class_names)
     
     # Turn images into data loaders
     training_dataloader = DataLoader(
@@ -47,4 +47,8 @@ def create_dataloaders(train_dir, valid_dir, test_dir, transform, batch_size, nu
         pin_memory=True
     )
     
-    return training_dataloader, testing_dataloader, class_names
+    optimizer = torch.optim.SGD(params=model.parameters(), lr=0.001, momentum=0.9)
+    loss_fn = nn.CrossEntropyLoss()
+    epochs = 20
+    
+    return training_dataloader, testing_dataloader, num_classes, optimizer, loss_fn, epochs

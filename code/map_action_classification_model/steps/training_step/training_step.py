@@ -3,19 +3,20 @@ import torch.nn as nn
 from tqdm import tqdm
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
-from typing import Tuple, List, Dict
 import mlflow.pytorch
-from zenml.steps import step, Output, BaseStepConfig
+from typing import Annotated, Optional, Tuple, List, Dict
+from zenml import step
 from zenml.pipelines import pipeline
-from zenml.integrations.mlflow.mlflow_step_decorator import enable_mlflow
+from zenml.integrations.mlflow.experiment_trackers import (
+    MLFlowExperimentTracker,
+)
 
-@enable_mlflow
-@step(enable_cache=False)
-def train_model(model: nn.Module, train_dataloader, optimizer, loss_fn, epochs=20) -> Output(
-    model = nn.Module,
-    results = List
-    
-):
+
+@step(enable_cache=False, experiment_tracker="mlflow_tracker")
+def train_model(model: nn.Module, train_dataloader, optimizer, loss_fn, epochs=20) -> Tuple[
+    Annotated[nn.Module, "model"],
+    Annotated[List, "results"]
+]:
     """
     Train a PyTorch model.
 
