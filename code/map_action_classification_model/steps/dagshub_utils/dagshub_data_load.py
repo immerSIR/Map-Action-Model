@@ -87,7 +87,7 @@ def download_and_organize_data() -> Tuple[
     valid_dir = f"{data_dir}/{valid_dir}"
     test_dir = f"{data_dir}/{test_dir}"
     batch_size = 20
-    NUM_WORKERS = os.cpu_count()
+    NUM_WORKERS = 2
     transform = get_transform(train=True)
 
     return  train_dir, valid_dir, test_dir, transform, batch_size, NUM_WORKERS

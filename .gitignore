@@ -170,7 +170,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-model/
 *.h5
 *.pth
 # PyCharm
