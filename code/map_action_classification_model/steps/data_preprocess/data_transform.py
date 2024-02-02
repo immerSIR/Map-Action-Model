@@ -1,8 +1,9 @@
 import torch
 from torchvision.transforms import v2 as T
 from typing import Annotated, Optional, Tuple
+from zenml import step, pipeline
 
-
+@step
 def get_transform(train):
     # Initialize an empty list to store transformations
     transforms = []
@@ -14,7 +15,7 @@ def get_transform(train):
         # Randomly resize and crop the image to the specified size with antialiasing
         transforms.append(T.RandomResizedCrop(size=[224, 224], antialias=True))
         # Normalize the image with mean=[0.] (Please replace with actual mean values)
-        transforms.append(T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])) 
+        #transforms.append(T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])) 
 
     # Convert the image to torch float and scale the pixel values
     transforms.append(T.ToDtype(torch.float, scale=True))
