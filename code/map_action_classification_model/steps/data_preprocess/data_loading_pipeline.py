@@ -2,24 +2,24 @@ import torch
 from torchvision import datasets
 from torch.utils.data import DataLoader
 from typing import Annotated, Optional, Tuple, List, Dict
-from zenml import step
-from zenml.pipelines import pipeline
+from ..data_preprocess.data_transform import get_transform
+from zenml import step,pipeline
 
 
 @step
-def create_dataloaders(train_dir, valid_dir, test_dir, transform, batch_size, num_workers) -> Tuple[
-    Annotated[DataLoader, "trainin_dataloader"],
-    Annotated[DataLoader, "testting_dataloader"],
-    Annotated[List, "num_names"],
-    Annotated[torch.optim.Optimizer, "optimzer"],
-    Annotated[torch.nn.Module, "loss_fn"],
+def create_dataloaders(train_dir:str, valid_dir:str, test_dir:str, batch_size:int) -> Tuple[
+    Annotated[DataLoader, "training_dataloader"],
+    Annotated[DataLoader, "testing_dataloader"],
+    Annotated[int, "num_classes"],
     Annotated[int, "epochs"]
 ]:
     
+    NUM_WORKERS = 2
+    
     # Use ImageFolder to create dataset(s)
-    train_data = datasets.ImageFolder(train_dir, transform=transform)
-    valid_data = datasets.ImageFolder(valid_dir, transform=transform)
-    test_data = datasets.ImageFolder(test_dir, transform=transform)
+    train_data = datasets.ImageFolder(train_dir, transform=get_transform(train=True))
+    valid_data = datasets.ImageFolder(valid_dir, transform=get_transform(train=True))
+    test_data = datasets.ImageFolder(test_dir, transform=get_transform(train=True))
     
     # Get class names
     class_names = train_data.classes
@@ -30,28 +30,26 @@ def create_dataloaders(train_dir, valid_dir, test_dir, transform, batch_size, nu
         train_data,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=num_workers,
-        pin_memory=True,
+        num_workers=NUM_WORKERS,
+        pin_memory=True
     )
     
     validation_dataloader = DataLoader(
         valid_data,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=num_workers,
-        pin_memory=True,
+        num_workers=NUM_WORKERS,
+        pin_memory=True
     )
     
     testing_dataloader = DataLoader(
         test_data,
         batch_size=batch_size,
         shuffle=False,
-        num_workers=num_workers,
+        num_workers=NUM_WORKERS,
         pin_memory=True
     )
     
-    optimizer = torch.optim.SGD(params=model.parameters(), lr=0.001, momentum=0.9)
-    loss_fn = nn.CrossEntropyLoss()
     epochs = 20
     
-    return training_dataloader, testing_dataloader, num_classes, optimizer, loss_fn, epochs
+    return training_dataloader, testing_dataloader, num_classes, epochs

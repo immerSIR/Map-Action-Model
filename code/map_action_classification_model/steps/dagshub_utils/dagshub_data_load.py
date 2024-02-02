@@ -7,8 +7,7 @@ from glob import glob
 from dotenv import load_dotenv
 from dagshub.data_engine import datasources
 from typing import Annotated, Optional, Tuple
-from ..data_preprocess.data_transform import get_transform
-from zenml import step
+from zenml import step, pipeline
 
 load_dotenv()
 
@@ -22,16 +21,13 @@ def download_and_organize_data() -> Tuple[
     Annotated[str, "train_dir"],
     Annotated[str, "valid_dir"],
     Annotated[str, "test_dir"],
-    Annotated[torch.tensor, "transform"],
     Annotated[int, "batch_size"],
-    Annotated[int, "NUM_WORKERS"]
 ]:
     # Load data from a CSV file
-    Print("step1")
     ds = datasources.get(DAGSHUB_FULL_REPO, os.environ.get("DATASOURCE_NAME"))
     ds = ds.all().dataframe
     print(ds)
-    df = pd.read_csv("project-8.csv=", usecols=["choice", "image"])
+    df = pd.read_csv("project-8.csv", usecols=["choice", "image"])
     df_img = df["image"]
     ds_img = ds["path"]
 
@@ -74,7 +70,7 @@ def download_and_organize_data() -> Tuple[
     if len(files) > 0:
         for i, split in enumerate(['valid', 'test', 'train']):
             for n in data_volumes[i * 5: (i + 1) * 5]:
-                folder = files[n].split('/')[2]
+                folder = files[n].split('/')[1]
                 name = files[n].split('/')[-1]
                 try:
                     os.makedirs(os.path.join(data_dir, split, folder))
@@ -87,10 +83,8 @@ def download_and_organize_data() -> Tuple[
     valid_dir = f"{data_dir}/{valid_dir}"
     test_dir = f"{data_dir}/{test_dir}"
     batch_size = 20
-    NUM_WORKERS = 2
-    transform = get_transform(train=True)
 
-    return  train_dir, valid_dir, test_dir, transform, batch_size, NUM_WORKERS
+    return  train_dir, valid_dir, test_dir, batch_size
     
 
 

@@ -1,21 +1,19 @@
 import torch
-import torch.nn as nn
 from tqdm import tqdm
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 import mlflow.pytorch
 from typing import Annotated, Optional, Tuple, List, Dict
-from zenml import step
-from zenml.pipelines import pipeline
+from zenml import step, pipeline
 from zenml.integrations.mlflow.experiment_trackers import (
     MLFlowExperimentTracker,
 )
 
 
 @step(enable_cache=False, experiment_tracker="mlflow_tracker")
-def train_model(model: nn.Module, train_dataloader, optimizer, loss_fn, epochs=20) -> Tuple[
-    Annotated[nn.Module, "model"],
-    Annotated[List, "results"]
+def train_model(model: torch.nn.Module, train_dataloader:DataLoader, epochs:int) -> Tuple[
+    Annotated[torch.nn.Module, "model"],
+    Annotated[Dict, "results"]
 ]:
     """
     Train a PyTorch model.
@@ -29,8 +27,10 @@ def train_model(model: nn.Module, train_dataloader, optimizer, loss_fn, epochs=2
 
     Returns:
         Tuple[nn.Module, dict]: Trained model and dictionary containing training results.
+        
     """
-    model.cuda()
+    optimizer = torch.optim.SGD(params=model.parameters(), lr=0.001, momentum=0.9)
+    loss_fn = torch.nn.CrossEntropyLoss()
 
     results = {
         "train_loss": [],
