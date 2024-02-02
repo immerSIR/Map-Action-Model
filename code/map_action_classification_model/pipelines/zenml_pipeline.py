@@ -1,7 +1,7 @@
 import os
 import torch
-import zenml
-from zenml import pipeline
+import mlflow
+from zenml import pipeline, step
 from steps import download_and_organize_data
 from steps import get_transform
 from steps import m_a_model
@@ -23,7 +23,7 @@ def zenml_training_pipeline():
                                                                               num_workers=NUM_WORKERS)
     model = m_a_model(num_classes)
     model, results = train_model(model ,training_dataloader , optimizer, loss_fn, epochs)
-    test_loss, test_acc = evaluate_model(model, testing_dataloader, loss_fn)
+    test_loss, test_acc = test_step(model, testing_dataloader, loss_fn)
     
     
     

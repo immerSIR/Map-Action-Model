@@ -10,7 +10,10 @@ from zenml.pipelines import pipeline
 def create_dataloaders(train_dir, valid_dir, test_dir, transform, batch_size, num_workers) -> Tuple[
     Annotated[DataLoader, "trainin_dataloader"],
     Annotated[DataLoader, "testting_dataloader"],
-    Annotated[List, "class_names"]
+    Annotated[List, "num_names"],
+    Annotated[torch.optim.Optimizer, "optimzer"],
+    Annotated[torch.nn.Module, "loss_fn"],
+    Annotated[int, "epochs"]
 ]:
     
     # Use ImageFolder to create dataset(s)
