@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from tqdm import tqdm
+import mlflow
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from typing import Annotated, Optional, Tuple, List, Dict
@@ -10,17 +11,18 @@ from zenml.integrations.mlflow.experiment_trackers import (
 )
 
 @step(enable_cache=False, experiment_tracker="mlflow_tracker")
-def test_step(model: nn.Module, test_dataloader: DataLoader) -> Tuple[
+def test_step(model: nn.Module, test_dataloader: DataLoader, loss_fn: nn.Module) -> Tuple[
     Annotated[float, "test_loss"],
     Annotated[float, "test_acc"]
 ]:
-    loss_fn = torch.nn.CrossEntropyLoss()
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     model.eval()
     test_loss, test_acc = 0, 0
+    
 
     with torch.inference_mode():
         for batch, (X, y) in enumerate(test_dataloader):
-            X, y = X.cuda(), y.cuda()
+            X, y = X.to(device), y.to(device)
             test_pred_logits = model(X)
             loss = loss_fn(test_pred_logits, y)
             test_loss += loss.cpu().item()
@@ -31,10 +33,9 @@ def test_step(model: nn.Module, test_dataloader: DataLoader) -> Tuple[
     test_acc = test_acc / len(test_dataloader)
     
     
-    with mlflow.start_run() as run:
-        mlflow.log_metric("test_loss", test_loss)
-        mlflow.log_metric("test_acc", test_acc)
+    mlflow.log_metric("test_loss", test_loss)
+    mlflow.log_metric("test_acc", test_acc)
 
         # Log the PyTorch model as an artifact
-        mlflow.pytorch.log_model(model, "model")
+    mlflow.pytorch.log_model(model, "model")
     return test_loss, test_acc

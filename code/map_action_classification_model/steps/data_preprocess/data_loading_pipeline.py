@@ -6,12 +6,12 @@ from ..data_preprocess.data_transform import get_transform
 from zenml import step,pipeline
 
 
-@step
+@step(enable_cache=False)
 def create_dataloaders(train_dir:str, valid_dir:str, test_dir:str, batch_size:int) -> Tuple[
     Annotated[DataLoader, "training_dataloader"],
     Annotated[DataLoader, "testing_dataloader"],
     Annotated[int, "num_classes"],
-    Annotated[int, "epochs"]
+    Annotated[int, "epochs"],
 ]:
     
     NUM_WORKERS = 2
@@ -51,5 +51,6 @@ def create_dataloaders(train_dir:str, valid_dir:str, test_dir:str, batch_size:in
     )
     
     epochs = 20
+    
     
     return training_dataloader, testing_dataloader, num_classes, epochs

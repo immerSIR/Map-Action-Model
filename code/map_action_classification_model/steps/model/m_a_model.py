@@ -4,7 +4,10 @@ from typing import Annotated, Optional, Tuple
 from zenml import step
 
 @step
-def m_a_model(num_classes: int) -> torch.nn.Module:
+def m_a_model(num_classes: int) -> Tuple[
+    Annotated[torch.nn.Module, "model"],
+    Annotated[torch.nn.Module, "loss_fn"]
+]:
     # Load VGG16 model with batch normalization weights
     vgg16_bn_weights = VGG16_BN_Weights.DEFAULT
     model = vgg16_bn(weights=vgg16_bn_weights)
@@ -19,6 +22,8 @@ def m_a_model(num_classes: int) -> torch.nn.Module:
     features.extend([torch.nn.Linear(num_features, num_classes)])
     model.classifier = torch.nn.Sequential(*features)
     
-    return model
+    loss_fn = torch.nn.CrossEntropyLoss()
+    
+    return model, loss_fn 
 
         
