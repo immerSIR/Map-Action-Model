@@ -11,7 +11,7 @@ from zenml.integrations.mlflow.experiment_trackers import (
 
 
 @step(enable_cache=False, experiment_tracker="mlflow_tracker")
-def train_model(model: torch.nn.Module, train_dataloader:DataLoader, epochs:int) -> Tuple[
+def train_model(model: torch.nn.Module, train_dataloader:DataLoader, epochs:int, optimizer:torch.optim.Optimizer, loss_fn: torch.nn.Module) -> Tuple[
     Annotated[torch.nn.Module, "model"],
     Annotated[Dict, "results"]
 ]:
@@ -29,20 +29,22 @@ def train_model(model: torch.nn.Module, train_dataloader:DataLoader, epochs:int)
         Tuple[nn.Module, dict]: Trained model and dictionary containing training results.
         
     """
-    optimizer = torch.optim.SGD(params=model.parameters(), lr=0.001, momentum=0.9)
-    loss_fn = torch.nn.CrossEntropyLoss()
-
+    
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     results = {
         "train_loss": [],
         "train_acc": [],
     }
+    
+    optimizer = torch.optim.SGD(params=model.parameters(), lr=0.001, momentum=0.9)
+    model.to(device)
 
     for epoch in tqdm(range(epochs)):
         model.train()
         train_loss, train_acc = 0, 0
 
         for batch, (X, y) in enumerate(train_dataloader):
-            X, y = X.cuda(), y.cuda()
+            X, y = X.to(device), y.to(device)
             y_pred = model(X)
             loss = loss_fn(y_pred, y)
             train_loss += loss.cpu().item()
@@ -63,9 +65,10 @@ def train_model(model: torch.nn.Module, train_dataloader:DataLoader, epochs:int)
 
         results["train_loss"].append(train_loss)
         results["train_acc"].append(train_acc)
+        mlflow.end_run()
         
     
-    with mlflow.start_run() as run:
+    with mlflow.start_run():
         mlflow.pytorch.log_model(model, "model")
             
     return model, results

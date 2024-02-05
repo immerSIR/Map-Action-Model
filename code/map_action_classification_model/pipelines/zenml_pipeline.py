@@ -19,9 +19,9 @@ def zenml_training_pipeline():
                                                                               valid_dir = valid_dir, 
                                                                               test_dir = test_dir,
                                                                               batch_size = batch_size)
-    model= m_a_model(num_classes)
-    model, results = train_model(model ,training_dataloader, epochs)
-    test_loss, test_acc = test_step(model, testing_dataloader)
+    model, loss_fn= m_a_model(num_classes)
+    model, results = train_model(model ,training_dataloader, epochs, loss_fn)
+    test_loss, test_acc = test_step(model, training_dataloader, loss_fn)
     
     
     
