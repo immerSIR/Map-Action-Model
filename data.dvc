@@ -1,5 +1,6 @@
 outs:
-    - md5: 9be7221019f93e9674ec4423cdceacab.dir
-      size: 1507039154
-      path: data
-      nfiles: 764
+- md5: c1dfd068984c25f86e8fd7beb8727a24.dir
+  size: 7407584086
+  path: data
+  nfiles: 2099
+  hash: md5
