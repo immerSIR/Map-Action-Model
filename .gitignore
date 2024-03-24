@@ -41,6 +41,8 @@ datasets
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+pip/
+/pip
 
 # Unit test / coverage reports
 htmlcov/
@@ -95,7 +97,9 @@ target/
 # IPython
 profile_default/
 ipython_config.py
-
+/lib
+lib
+pip
 # pyenv
 #   For a library or package, you might want to ignore these files since the code is
 #   intended to run in multiple environments; otherwise, check them in:
@@ -145,6 +149,7 @@ venv.bak/
 ma_env/
 /ma_env
 /ma_env/
+ma_env
 
 # Spyder project settings
 .spyderproject
