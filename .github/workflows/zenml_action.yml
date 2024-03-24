@@ -13,10 +13,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-
     - name: Build and Run Docker Compose
-      run: docker-compose up --build -d
-
-    - name: Execute a command in the Docker container
-      run: docker exec -it <container_name> /bin/bash
-      # Replace <container_name> with your container name
+      working-directory: zenml_config
+      run: docker-compose -f zenml_conf.yml up --build 
