@@ -1,4 +1,4 @@
-name: Build and Run Docker Compose
+name: zenml server config
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-run:
+  zenml-build-and-run:
     runs-on: self-hosted
 
     steps:
