@@ -6,7 +6,7 @@ services:
     ports:
       - 3306:3306
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${{secrets.MYSQL_ROOT_PASSWORD}}
     networks:
       zenml-services-network:
         ipv4_address: 192.168.1.25
@@ -15,9 +15,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - ZENML_STORE_URL=${ZENML_STORE_URL}
-      - ZENML_DEFAULT_USER_NAME=${ZENML_DEFAULT_USER_NAME}
-      - ZENML_DEFAULT_USER_PASSWORD=${ZENML_DEFAULT_USER_PASSWORD}
+      - ZENML_STORE_URL=${{secrets.ZENML_STORE_URL}}
+      - ZENML_DEFAULT_USER_NAME=${{secrets.ZENML_DEFAULT_USER_NAME}}
+      - ZENML_DEFAULT_USER_PASSWORD=${{secrets.ZENML_DEFAULT_USER_PASSWORD}}
     links:
       - mysql
     depends_on:
