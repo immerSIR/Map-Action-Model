@@ -532,7 +532,7 @@ pytest
 
 Contributions are welcome! Here are several ways you can contribute:
 
-See our [Contribution Guidelines](CONTRIBUTING.md) for details on how to contribute.
+See our [Contribution Guidelines](https://github.com/223MapAction/.github/blob/main/CONTRIBUTING.md) for details on how to contribute.
 
 
 ---
@@ -545,7 +545,7 @@ This project is protected under the [GNU GPLv3](https://choosealicense.com/licen
 
 ## Code of conduct
 
-See our [Code of Conduct](CODE_OF_CONDUCT.md) for details on expected behavior in our community.
+See our [Code of Conduct](https://github.com/223MapAction/.github/blob/main/CODE_OF_CONDUCT.md) for details on expected behavior in our community.
 
 ---
 

@@ -1,0 +1,19 @@
+name: Unittesting
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  build-Unittesting:
+    runs-on: self-hosted
+      
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      
+      - name: Build and Run Docker Compose
+        working-directory: MapAction
+        run: |
+          docker-compose -f _ci.yml up --build
