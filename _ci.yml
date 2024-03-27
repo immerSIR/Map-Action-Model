@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+
+  django-app-test:
+    build:
+      context: ./services/unittesting/
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app  
