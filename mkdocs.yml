@@ -7,13 +7,16 @@ nav:
   - Data fetching: dataFetching.md
   - Model inference: modelEvaluation.md
   - Model training: modelTraining.md
+  - Contrubition-guideline: contrubition-guideline.md
+  - Install: install.md
 
 theme: 
-  name: 'material'
+  name: 'mkdocs'
 
 plugins:
   - search
   - mkdocstrings:
+      default_handler: python
       handlers:
           python:
             paths: [code]
