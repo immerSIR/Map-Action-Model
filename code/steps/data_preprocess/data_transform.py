@@ -1,34 +1,29 @@
 import torch
 from torchvision.transforms import v2 as T
 from typing import Annotated, Optional, Tuple
-from zenml import step, pipeline
 
-@step
-def get_transform(train):
+def get_transform(train: bool) -> T.Compose:
     """
     Get image transformations based on whether it's for training or not.
+
+    This function builds a series of image transformations using torchvision v2 API,
+    tailored for either training or testing phase. The transformations for training 
+    include random horizontal flipping and resizing with cropping, followed by normalization.
+    For both training and testing, the images are converted to torch.float32 and scaled.
 
     Args:
         train (bool): True if transformations are for training, False otherwise.
 
     Returns:
-        torchvision.transforms.Compose: Composition of image transformations.
+        T.Compose: A torchvision.transforms.Compose object that represents the composition 
+        of image transformations.
     """
-    # Initialize an empty list to store transformations
-    transforms = []
+    transforms = []  # Initialize an empty list to store transformations
 
-    # Apply transformations for training
     if train:
-        # Randomly flip the image horizontally with a probability of 50%
-        transforms.append(T.RandomHorizontalFlip(0.5))
-        # Randomly resize and crop the image to the specified size with antialiasing
-        transforms.append(T.RandomResizedCrop(size=[224, 224], antialias=True))
-        # Normalize the image with mean=[0.] (Please replace with actual mean values)
-        # transforms.append(T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]))
+        transforms.append(T.RandomHorizontalFlip(0.5))  # Randomly flip the image horizontally
+        transforms.append(T.RandomResizedCrop(size=[224, 224], antialias=True))  # Resize and crop
 
-    # Convert the image to torch float and scale the pixel values
-    transforms.append(T.ToDtype(torch.float32, scale=True))
+    transforms.append(T.ToDtype(torch.float32, scale=True))  # Convert to float32 and scale
 
-    # Combine all transformations into a single composition
-    return T.Compose(transforms)
-
+    return T.Compose(transforms)  # Combine transformations into a Compose object
