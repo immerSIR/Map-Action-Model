@@ -5,8 +5,10 @@ services:
     image: mysql:latest
     ports:
       - 3306:3306
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    env_file:
+      - ~/.dev.env
+    #environment:
+     # - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     networks:
       zenml-services-network:
         ipv4_address: 192.168.1.25
@@ -14,10 +16,12 @@ services:
     image: zenmldocker/zenml-server
     ports:
       - "8080:8080"
-    environment:
-      - ZENML_STORE_URL=${ZENML_STORE_URL}
-      - ZENML_DEFAULT_USER_NAME=${ZENML_DEFAULT_USER_NAME}
-      - ZENML_DEFAULT_USER_PASSWORD=${ZENML_DEFAULT_USER_PASSWORD}
+    env_file:
+      - ~/.dev.env
+    #environment:
+     # - ZENML_STORE_URL=${ZENML_STORE_URL}
+      #- ZENML_DEFAULT_USER_NAME=${ZENML_DEFAULT_USER_NAME}
+      #- ZENML_DEFAULT_USER_PASSWORD=${ZENML_DEFAULT_USER_PASSWORD}
     links:
       - mysql
     depends_on:
