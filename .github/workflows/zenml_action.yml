@@ -15,4 +15,4 @@ jobs:
 
     - name: Build and Run Docker Compose
       working-directory: zenml_config
-      run: docker-compose -f zenml_conf.yml up --build 
+      run: docker-compose -f zenml_conf.yml up --build -d
