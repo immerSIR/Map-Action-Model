@@ -5,6 +5,6 @@ services:
   django-app-test:
     build:
       context: .
-      dockerfile: ./services/unittesting/
+      dockerfile: ./services/unittesting/Dockerfile
     volumes:
       - .:/app  
