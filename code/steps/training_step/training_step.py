@@ -2,6 +2,7 @@ import torch
 from tqdm import tqdm
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
+import mlflow
 import mlflow.pytorch
 from typing import Annotated, Optional, Tuple, List, Dict
 from zenml import step, pipeline
@@ -10,7 +11,7 @@ from zenml.integrations.mlflow.experiment_trackers import (
 )
 
 
-@step(enable_cache=False, experiment_tracker="mlflow_tracker")
+@step(experiment_tracker="mlflow_tracker-2")
 def train_model(model: torch.nn.Module, train_dataloader: DataLoader, epochs: int, loss_fn: torch.nn.Module) -> Tuple[
     Annotated[torch.nn.Module, "model"],
     Annotated[Dict, "results"]

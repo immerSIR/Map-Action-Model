@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+
+  training:
+    buidl:
+      context: .
+      dockerfile: ./services/training/
+    volumes:
+      - ~/model-store:/app/model
+      

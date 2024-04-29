@@ -42,6 +42,7 @@ def download_and_organize_data() -> Tuple[
     train_dir = "train"
     valid_dir = "valid"
     test_dir = "test"
+    os.makedirs(data_dir)
 
     # Randomly permute indices
     data_volumes = rand_shuffle = np.random.permutation(df_img.shape[0])

@@ -11,7 +11,7 @@ from zenml.integrations.mlflow.experiment_trackers import (
 )
 
 
-@step(enable_cache=True, experiment_tracker="mlflow_tracker")
+@step(experiment_tracker="mlflow_tracker-2")
 def test_step(model: nn.Module, test_dataloader: DataLoader, loss_fn: nn.Module, results: Dict, epochs: int) -> Tuple[
     Annotated[float, "test_loss"],
     Annotated[float, "test_acc"],

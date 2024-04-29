@@ -2,14 +2,15 @@ site_name: Map Action Model
 nav:
   - Welcom: index.md
   - System Arch : systemArch.md
+  - Image annotation process : imageAnnotation.md
   - Data pre-processing: dataPreprocessing.md
   - Model fine tuning : modelFinetuning.md
   - Data fetching: dataFetching.md
   - Model inference: modelEvaluation.md
   - Model training: modelTraining.md
+  - Setup and Run: install.md
   - Contrubition-guideline: contrubition-guideline.md
-  - Install: install.md
-
+  
 theme: 
   name: 'mkdocs'
 
