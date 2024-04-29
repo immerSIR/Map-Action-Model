@@ -39,3 +39,6 @@ tqdm==4.66.1
 xmlrpclib==1.0.1
 zenml==0.56.1
 zipp==1.0.0
+pytest-xdist
+pytest-asyncio
+pytest-cov

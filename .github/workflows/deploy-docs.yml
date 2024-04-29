@@ -16,7 +16,7 @@ jobs:
           python-version: "3.10"
       - name: Install dependencies
         run: |
-            pip install mkdocs mkdocstrings mkdocs-material
+            pip install mkdocs mkdocstrings mkdocs-material mkdocstrings-python
       - name: Build MkDocs site
         run: mkdocs build
       - name: Deploy to GitHub Pages
