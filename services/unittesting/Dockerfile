@@ -17,5 +17,5 @@ RUN pip install flake8
 
 # Set the working directory to /app/MapAction
 # Install coverage and run tests
-RUN pip install coverage pytest-cov
+RUN pip install -r requirements.txt
 RUN pytest -n auto --asyncio-mode=auto --cov=. --cov-report=xml --cov-report=term-missing
