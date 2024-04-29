@@ -8,7 +8,6 @@ dl==0.1.0
 docutils==0.20.1
 HTMLParser==0.0.2
 importlib_metadata==6.8.0
-importlib_metadata==4.6.4
 ipython==8.19.0
 ipywidgets==7.8.1
 Jinja2==3.1.2
@@ -21,8 +20,6 @@ numpy==1.26.3
 ordereddict==1.1
 pandas==2.2.0
 Pillow==10.1.0
-Pillow==9.0.1
-Pillow==10.2.0
 protobuf==3.12.4
 psycopg2_binary==2.9.9
 pycocotools==2.0.7
