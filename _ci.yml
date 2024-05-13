@@ -2,7 +2,7 @@ version: '3'
 
 services:
 
-  django-app-test:
+  app-test:
     build:
       context: .
       dockerfile: ./services/unittesting/Dockerfile
