@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   deploy-docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2 # Check if there's a newer version
       - name: Setup Python
