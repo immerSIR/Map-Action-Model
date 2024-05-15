@@ -6,12 +6,14 @@ on:
       - main
 
 permissions:
+      contents: write
+      pages: write
       id-token: write
-      contents: read
+      
 
 jobs:
   deploy-docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2 # Check if there's a newer version
       - name: Setup Python
@@ -23,6 +25,10 @@ jobs:
             pip install mkdocs mkdocstrings mkdocs-material mkdocstrings-python
       - name: Build MkDocs site
         run: mkdocs build
+      - name: gitconfig
+        run: |
+            git config user.name github-actions[bot]
+            git config user.email github-actions[bot]@users.noreply.github.com
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3 # Check if there's a newer version
         with:
