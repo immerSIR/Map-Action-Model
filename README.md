@@ -12,6 +12,7 @@
 	<img src="https://img.shields.io/github/last-commit/223MapAction/Map-Action-Model.git?style=flat-square&color=0080ff" alt="last-commit">
 	<img src="https://img.shields.io/github/languages/top/223MapAction/Map-Action-Model.git?style=flat-square&color=0080ff" alt="repo-top-language">
 	<img src="https://img.shields.io/github/languages/count/223MapAction/Map-Action-Model.git?style=flat-square&color=0080ff" alt="repo-language-count">
+	[![Deploy MkDocs Site](https://github.com/223MapAction/Map-Action-Model/actions/workflows/deploy-docs.yml/badge.svg)](https://github.com/223MapAction/Map-Action-Model/actions/workflows/deploy-docs.yml)
 <p>
 <p align="center">
 		<em>Developed with the software and tools below.</em>
