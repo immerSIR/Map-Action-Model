@@ -51,7 +51,8 @@
 
 ##  Overview
 
-
+Map Action Model is the codebase for the continous training of Map Acion computer vision model.
+![Selection_080](https://github.com/223MapAction/Map-Action-Model/assets/64170643/cf467484-6f1b-49b7-9c09-e9bf9b0031ae)
 
 ---
 
