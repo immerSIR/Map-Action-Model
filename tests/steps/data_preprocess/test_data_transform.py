@@ -1,29 +1,58 @@
+import pytest
 import torch
 from torchvision.transforms import v2 as T
-from typing import Annotated, Optional, Tuple
+from unittest.mock import patch
+from code.steps.data_preprocess.data_transform import get_transform
 
-def get_transform(train: bool) -> T.Compose:
-    """
-    Get image transformations based on whether it's for training or not.
 
-    This function builds a series of image transformations using torchvision v2 API,
-    tailored for either training or testing phase. The transformations for training 
-    include random horizontal flipping and resizing with cropping, followed by normalization.
-    For both training and testing, the images are converted to torch.float32 and scaled.
+@patch('code.steps.data_preprocess.data_transform.T.RandomHorizontalFlip')
+@patch('code.steps.data_preprocess.data_transform.T.RandomResizedCrop')
+@patch('code.steps.data_preprocess.data_transform.T.ToDtype')
+@patch('code.steps.data_preprocess.data_transform.T.Compose')
+def test_get_transform_train(mock_Compose, mock_ToDtype, mock_RandomResizedCrop, mock_RandomHorizontalFlip):
+    # Arrange
+    train = True
+    mock_RandomHorizontalFlip_instance = mock_RandomHorizontalFlip.return_value
+    mock_RandomResizedCrop_instance = mock_RandomResizedCrop.return_value
+    mock_ToDtype_instance = mock_ToDtype.return_value
 
-    Args:
-        train (bool): True if transformations are for training, False otherwise.
+    # Act
+    transform = get_transform(train=train)
 
-    Returns:
-        T.Compose: A torchvision.transforms.Compose object that represents the composition 
-        of image transformations.
-    """
-    transforms = []  # Initialize an empty list to store transformations
+    # Assert
+    mock_RandomHorizontalFlip.assert_called_once_with(0.5)
+    mock_RandomResizedCrop.assert_called_once_with(
+        size=[224, 224], antialias=True)
+    mock_ToDtype.assert_called_once_with(torch.float32, scale=True)
 
-    if train:
-        transforms.append(T.RandomHorizontalFlip(0.5))  # Randomly flip the image horizontally
-        transforms.append(T.RandomResizedCrop(size=[224, 224], antialias=True))  # Resize and crop
+    # Check that Compose receives the correct sequence of transformations
+    mock_Compose.assert_called_once_with([
+        mock_RandomHorizontalFlip_instance,
+        mock_RandomResizedCrop_instance,
+        mock_ToDtype_instance
+    ])
+    assert transform == mock_Compose.return_value
 
-    transforms.append(T.ToDtype(torch.float32, scale=True))  # Convert to float32 and scale
 
-    return T.Compose(transforms)  # Combine transformations into a Compose object
+@patch('code.steps.data_preprocess.data_transform.T.ToDtype')
+@patch('code.steps.data_preprocess.data_transform.T.Compose')
+def test_get_transform_not_train(mock_Compose, mock_ToDtype):
+    # Arrange
+    train = False
+    mock_ToDtype_instance = mock_ToDtype.return_value
+
+    # Act
+    transform = get_transform(train=train)
+
+    # Assert
+    mock_ToDtype.assert_called_once_with(torch.float32, scale=True)
+
+    # Check that Compose receives the correct sequence of transformations
+    mock_Compose.assert_called_once_with([
+        mock_ToDtype_instance
+    ])
+    assert transform == mock_Compose.return_value
+
+
+if __name__ == '__main__':
+    pytest.main()
