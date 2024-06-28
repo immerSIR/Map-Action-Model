@@ -7,13 +7,7 @@
 <p align="center">
     <em>Map your actions with precision and value!</em>
 </p>
-<p align="center">
-	<img src="https://img.shields.io/github/license/223MapAction/Map-Action-Model.git?style=flat-square&color=0080ff" alt="license">
-	<img src="https://img.shields.io/github/last-commit/223MapAction/Map-Action-Model.git?style=flat-square&color=0080ff" alt="last-commit">
-	<img src="https://img.shields.io/github/languages/top/223MapAction/Map-Action-Model.git?style=flat-square&color=0080ff" alt="repo-top-language">
-	<img src="https://img.shields.io/github/languages/count/223MapAction/Map-Action-Model.git?style=flat-square&color=0080ff" alt="repo-language-count">
-	
-<p>
+
 <p align="center">
 		<em>Developed with the software and tools below.</em>
 </p>
@@ -62,16 +56,13 @@ Map Action Model is the codebase for the continous training of Map Acion compute
 
 |    |   Feature         | Description |
 |----|-------------------|---------------------------------------------------------------|
-| ⚙️  | **Architecture**  | The project seems to follow a modular architecture with dependencies on libraries like Brotli, Pillow, and FastAPI. It utilizes a mix of Python and related technologies for development. |
-| 🔩 | **Code Quality**  | The code quality appears to be maintained with the use of tools such as Sphinx for documentation and potentially other linting tools based on the repository contents. |
-| 📄 | **Documentation** | The project includes Sphinx for documentation generation, which indicates a focus on providing extensive and structured documentation for the codebase. |
+| ⚙️  | **Architecture**  | The project follow a modular architecture with dependencies on libraries like Brotli, Pillow, and FastAPI. It utilizes a mix of Python and related technologies for development. |
+| 🔩 | **Code Quality**  | The code quality is maintained with the use of tools such as MkDocs for documentation and potentially other linting tools based on the repository contents. |
+| 📄 | **Documentation** | The project includes MKDocs for documentation generation, providing extensive and structured documentation for the codebase. |
 | 🔌 | **Integrations**  | Key integrations include Brotli, tqdm, and FastAPI among others, suggesting a reliance on external libraries and tools for functionality. |
-| 🧩 | **Modularity**    | The project seems to be structured in a modular way, with dependencies on various libraries like Torch, torchvision, and others, indicating potential code reusability. |
-| 🧪 | **Testing**       | Testing frameworks like PyTest or other tools could be utilized based on the type of project and the testing requirements. Further detail on specific testing tools used is not evident. |
-| ⚡️  | **Performance**   | The efficiency and resource usage of the project can be influenced by the performance characteristics of libraries like Torch, FastAPI, and others used within the codebase. |
-| 🛡️ | **Security**      | Security measures may be in place based on libraries like cryptography and potentially SSL usage with libraries like PyOpenSSL, but a deeper evaluation would be needed to ascertain specific security measures. |
+| 🧩 | **Modularity**    | The project is structured in a modular way, with dependencies on various libraries like Torch, torchvision, and others, indicating potential code reusability. |
+| 🧪 | **Testing**       | Testing frameworks is PyTest |
 | 📦 | **Dependencies**  | Key external libraries and dependencies include Brotli, Pillow, FastAPI, Torch, torchvision, and others, indicating a reliance on diverse libraries for functionality. |
-| 🚀 | **Scalability**   | The use of FastAPI and Torch can suggest a potential for scalability in handling increased traffic and load, but scalability ultimately depends on the architecture and design choices made. |
 
 
 ---
