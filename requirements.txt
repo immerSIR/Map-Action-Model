@@ -15,4 +15,4 @@ zenml==0.56.1
 pytest-xdist
 pytest-asyncio
 pytest-cov
-mlflow
+mlflow==2.10.0
