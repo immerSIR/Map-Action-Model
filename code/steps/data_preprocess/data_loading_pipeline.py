@@ -32,7 +32,7 @@ def create_dataloaders(train_dir: str, valid_dir: str, test_dir: str, batch_size
     # Use ImageFolder to create dataset(s)
     train_data = datasets.ImageFolder(train_dir, transform=get_transform(train=True))
     # valid_data = datasets.ImageFolder(valid_dir, transform=get_transform(train=True))
-    test_data = datasets.ImageFolder(test_dir, transform=get_transform(train=True))
+    test_data = datasets.ImageFolder(test_dir, transform=get_transform(train=False))
 
     # Get class names
     class_names = train_data.classes
