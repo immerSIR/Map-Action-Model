@@ -16,6 +16,7 @@ DAGSHUB_REPO = os.environ.get("DAGSHUB_REPO")
 
 DAGSHUB_FULL_REPO = f"{DAGSHUB_REPO_OWNER}/{DAGSHUB_REPO}"
 
+
 @step
 def download_and_organize_data() -> Tuple[
     Annotated[str, "train_dir"],
@@ -33,7 +34,7 @@ def download_and_organize_data() -> Tuple[
     ds = datasources.get(DAGSHUB_FULL_REPO, os.environ.get("DATASOURCE_NAME"))
     ds = ds.all().dataframe
     print(ds)
-    df = pd.read_csv("project-8.csv", usecols=["choice", "image"])
+    df = pd.read_csv("project_9.csv", usecols=["choice", "image"])
     df_img = df["image"]
     ds_img = ds["path"]
 
@@ -93,7 +94,7 @@ def download_and_organize_data() -> Tuple[
         except FileExistsError:
             pass  # Directory already exists
         os.rename(files[n], os.path.join(data_dir, test_dir, folder, name))
-    
+
     for n in data_volumes[30:]:
         folder = files[n].split('/')[1]
         name = files[n].split('/')[-1]
@@ -102,11 +103,11 @@ def download_and_organize_data() -> Tuple[
         except FileExistsError:
             pass  # Directory already exists
         os.rename(files[n], os.path.join(data_dir, train_dir, folder, name))
-                    
+
     print(f"{data_dir}/{train_dir}")
     train_dir = f"{data_dir}/{train_dir}"
     valid_dir = f"{data_dir}/{valid_dir}"
     test_dir = f"{data_dir}/{test_dir}"
     batch_size = 20
 
-    return  train_dir, valid_dir, test_dir, batch_size
+    return train_dir, valid_dir, test_dir, batch_size
